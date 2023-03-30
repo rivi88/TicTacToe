@@ -22,7 +22,6 @@ public class GameBoard {
         if (user.equals("player1")) {
             symbol = 'X';
             AppTicTacTou.player1Positions.add(pos);
-
         } else if (user.equals("player2")){
             symbol = 'O';
             AppTicTacTou.player2Positions.add(pos);
