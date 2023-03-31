@@ -4,6 +4,7 @@ import com.rmac.tictactoe.*;
 
 import java.util.Scanner;
 
+
 public class AppTicTacTou {
     WinConditions winConditions = new WinConditions();
     GameBoard board = new GameBoard();
