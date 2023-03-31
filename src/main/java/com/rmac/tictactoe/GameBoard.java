@@ -1,14 +1,14 @@
 package com.rmac.tictactoe;
 
-import com.rmac.AppTicTacTou;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameBoard {
-
 
     char[][] gameBoard = {{'|', ' ', '|', ' ', '|', ' ', '|'},
             {'|', ' ', '|', ' ', '|', ' ', '|'},
             {'|', ' ', '|', ' ', '|', ' ', '|'}};
-    public static void printGameBoard(char[][] gameBoard) {
+    public void printGameBoard() { // przerobić żeby nie coś zwracało
         for (char[] row : gameBoard) {
             for (char c : row) {
                 System.out.print(c);
@@ -16,15 +16,14 @@ public class GameBoard {
             System.out.println();
         }
     }
-    public static void fieldPiece(char[][] gameBoard, int pos, String user) {
-        char symbol = ' ';
+    private List<Integer> symbolsX = new ArrayList<>();
+    private List<Integer> symbolsO = new ArrayList<>();
+    public void fieldPiece(int pos, char symbol) {
 
-        if (user.equals("player1")) {
-            symbol = 'X';
-            AppTicTacTou.player1Positions.add(pos);
-        } else if (user.equals("player2")){
-            symbol = 'O';
-            AppTicTacTou.player2Positions.add(pos);
+        if (symbol == 'X') {
+            symbolsX.add(pos);
+        } else if (symbol == 'O') {
+            symbolsO.add(pos);
         }
 
         switch(pos) {
@@ -61,5 +60,20 @@ public class GameBoard {
     }
     public char[][] getGameBoard() {
         return gameBoard;
+    }
+    public List<Integer> getSymbolsX() {
+        return symbolsX;
+    }
+
+    public List<Integer> getSymbolsO() {
+        return symbolsO;
+    }
+
+    public boolean isOccupied(int move) {
+        boolean occupied = symbolsX.contains(move) || symbolsO.contains(move);
+        if (occupied) {
+            System.out.println("Positions is taken! Select correct position");
+        }
+        return occupied;
     }
 }

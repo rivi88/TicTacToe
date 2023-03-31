@@ -1,6 +1,6 @@
 package com.rmac.tictactoe;
 
-import com.rmac.AppTicTacTou;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,35 +30,16 @@ public class WinConditions {
         winningConditions.add(cross2);
     }
 
-    public String checkWinner(ArrayList<Integer> player1Positions, ArrayList<Integer> player2Positions) {
+    public String checkWinner(GameBoard gameBoard, PlayerInterface player) {
 
-        for (List<Integer> l : winningConditions) {
-            if (player1Positions.containsAll(l)) {
-                return "Congratulations Player1 You won!";
-            } else if (player2Positions.containsAll(l)) {
-                return "Congratulations Player2 You won!";
-            } else if (player2Positions.size() + player1Positions.size() == 9) {
-                return "It's a tie!";
+        for (List<Integer> conditions : winningConditions) {
+            if (gameBoard.getSymbolsX().containsAll(conditions) || gameBoard.getSymbolsO().containsAll(conditions)) {
+                return "Congratulations " + player.getName() + " You won!";
             }
         }
-        return "";//return class Result
-    }
-}
-
-class Result {
-    private final String message;
-    private final String status;//"winner", "tie", "no winner";
-
-    public Result(String message, String status) {
-        this.message = message;
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getStatus() {
-        return status;
+        if (gameBoard.getSymbolsX().size() + gameBoard.getSymbolsO().size() == 9) {
+            return "It's a tie!";
+        }
+        return "Game Runs";
     }
 }
