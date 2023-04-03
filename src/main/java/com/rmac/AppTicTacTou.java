@@ -15,10 +15,18 @@ public class AppTicTacTou {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome in Game TicTacTou! \n Please choose how many person will be play (1 lub 2)");
-        int numberOfPlayers = scanner.nextInt();
-        while (numberOfPlayers != 1 && numberOfPlayers != 2) {
-            System.out.println("Please try again choose number of players:");
-            numberOfPlayers = scanner.nextInt();
+        int numberOfPlayers = 0;
+        while (true) {
+            try {
+                numberOfPlayers = Integer.parseInt(scanner.nextLine());
+                if (numberOfPlayers == 1 || numberOfPlayers == 2) {
+                    break;
+                } else {
+                    System.out.println("Please try again and choose number of players 1 or 2:");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please try again and choose number of players 1 or 2:");
+            }
         }
         System.out.println("Please write Your Name:");
         String playerName = scanner.next();
@@ -31,10 +39,10 @@ public class AppTicTacTou {
         } else {
             player2 = new PlayerCPU("CPU", 'O');
         }
-        appTicTacTou.codeGamePlayFor2Players(player1, player2);
+        appTicTacTou.theWinnerIs(player1, player2);
     }
 
-    private void codeGamePlayFor2Players(PlayerInterface player1, PlayerInterface player2) {
+    private void theWinnerIs(PlayerInterface player1, PlayerInterface player2) {
         board.printGameBoard();
         while (true) {
             playerMoves(board, player1);
@@ -42,11 +50,11 @@ public class AppTicTacTou {
 
             if (checkWinner(board, player1)) break;
             playerMoves(board, player2);
-//            board.playerMoves(player2);
+
             board.printGameBoard();
 
             if (checkWinner(board,  player2)) break;
-//            if (winConditions.checkWinner(board, player)) break;
+
 
         }
     }
