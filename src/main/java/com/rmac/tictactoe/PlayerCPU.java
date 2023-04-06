@@ -14,9 +14,9 @@ public class PlayerCPU implements PlayerInterface {
     }
 
     @Override
-    public int move(int boardSize) {
-        System.out.println(this.getName() + " select your field by keyboard (1-9) ");
-        return random.nextInt(boardSize * boardSize);
+    public Move move(int boardSize) {
+        System.out.println(this.getName() + " has made it's move.");
+        return new Move(random.nextInt(boardSize), random.nextInt(boardSize));
 
     }
 

@@ -6,4 +6,5 @@ public interface PlayerInterface {
     String getName();
 
     char getSign();
+
 }

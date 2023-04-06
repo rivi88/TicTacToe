@@ -1,12 +1,12 @@
 package com.rmac.tictactoe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameBoard {
 
+    public static final char TIE = '-';
+    public static final char CONTINUE = 'c';
     private final int size;
-    private char[] gameBoard2;
+    char[][] gameBoard;
+    private int moves = 0;
 
     public GameBoard(int size) {
         this.size = size;
@@ -26,15 +26,13 @@ public class GameBoard {
         for (int i = 0; i < size; i++) {
             builder.append(" ").append(i);
         }
-        builder.append("\n0");
-        for (int i = 1; i <= size * size; i++) {
-            builder.append("|").append(gameBoard2[i - 1]);
-            if (i % size == 0) {
-                builder.append("|").append("\n");
-                if (i != size * size) {
-                    builder.append(i / size);
-                }
+        builder.append("\n");
+        for (int i = 0; i < size; i++) {
+            builder.append(i);
+            for (int j = 0; j < size; j++) {
+                builder.append("|").append(gameBoard[i][j]);
             }
+            builder.append("|").append("\n");
         }
         return builder.toString();
     }
@@ -43,25 +41,14 @@ public class GameBoard {
         return size;
     }
 
-    private List<Integer> symbolsX = new ArrayList<>();
-    private List<Integer> symbolsO = new ArrayList<>();
-
-    public void fieldPiece(int pos, char symbol) {
-
+    public void fieldPiece(Move move, char symbol) {
+        moves++;
         if (symbol == 'X') {
             symbolsX.add(pos);
         } else if (symbol == 'O') {
             symbolsO.add(pos);
         }
 
-    }
-
-    public List<Integer> getSymbolsX() {
-        return symbolsX;
-    }
-
-    public List<Integer> getSymbolsO() {
-        return symbolsO;
     }
 
     public boolean isOccupied(int move) {
@@ -72,7 +59,8 @@ public class GameBoard {
         return occupied;
     }
 
-    public char checkWinner3(char[][] board) {
+    public char checkWinner3(char[][] board, char symbol) {
+        int winLength = 3;
         // check rows
         for (int i = 0; i < 3; i++) {
             if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
@@ -94,30 +82,61 @@ public class GameBoard {
         if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
             return board[0][2];
         }
-
-        // no winner
-        return '-';
+        return isATie();
     }
 
-    public static char checkWinner10(char[][] board) {
-        // check rows
+    private static boolean checkDiagonals(char[][] board, char symbol, int winLength) {
+        for (int i = 0; i < winLength; i++) {
+            if (symbol != board[i][i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkCol(char[][] board, char symbol, int col, int winLength) {
+        for (int row = 0; row < winLength; row++) {
+            if (symbol != board[row][col]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkRow(char symbol, char[] boardRow, int winLength) {
+        for (int col = 0; col < winLength; col++) {
+            if (symbol != boardRow[col]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private char isATie() {
+
+        if (moves == size * size) {
+            return TIE;
+        }
+        // no winner
+        return CONTINUE;
+    }
+
+    public char checkWinner10(char[][] board, char symbol) {
+
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 6; j++) {
-                if (board[i][j] != '-' && board[i][j] == board[i][j + 1] &&
-                        board[i][j + 1] == board[i][j + 2] && board[i][j + 2] == board[i][j + 3] &&
-                        board[i][j + 3] == board[i][j + 4]) {
-                    return board[i][j];
+                if (checkRow10(j, board[i])) {
+                    return symbol;
                 }
             }
         }
-
         // check columns
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 10; j++) {
-                if (board[i][j] != '-' && board[i][j] == board[i + 1][j] &&
+                if (board[i][j] != ' ' && board[i][j] == board[i + 1][j] &&
                         board[i + 1][j] == board[i + 2][j] && board[i + 2][j] == board[i + 3][j] &&
                         board[i + 3][j] == board[i + 4][j]) {
-                    return board[i][j];
+                    return symbol;
                 }
             }
         }
@@ -125,10 +144,10 @@ public class GameBoard {
         // check diagonals (top-left to bottom-right)
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
-                if (board[i][j] != '-' && board[i][j] == board[i + 1][j + 1] &&
+                if (board[i][j] != ' ' && board[i][j] == board[i + 1][j + 1] &&
                         board[i + 1][j + 1] == board[i + 2][j + 2] && board[i + 2][j + 2] == board[i + 3][j + 3] &&
                         board[i + 3][j + 3] == board[i + 4][j + 4]) {
-                    return board[i][j];
+                    return symbol;
                 }
             }
         }

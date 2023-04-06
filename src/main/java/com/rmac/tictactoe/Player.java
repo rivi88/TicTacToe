@@ -1,5 +1,7 @@
 package com.rmac.tictactoe;
 
+import com.rmac.AppTicTacTou;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -7,6 +9,7 @@ public class Player implements PlayerInterface{
     Scanner scanner = new Scanner(System.in);
     private final String name;
     private final char sign;
+
 
     public Player(String name, char sign) {
         this.name = name;
