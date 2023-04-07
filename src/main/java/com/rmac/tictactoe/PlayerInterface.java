@@ -1,7 +1,7 @@
 package com.rmac.tictactoe;
 
 public interface PlayerInterface {
-    int move(int size);
+    Move move(int size);
 
     String getName();
 
