@@ -1,3 +1,4 @@
+
 package com.rmac;
 
 import com.rmac.tictactoe.*;
@@ -6,16 +7,15 @@ import java.util.Scanner;
 
 
 public class AppTicTacTou {
-    WinConditions winConditions = new WinConditions();
-    GameBoard board = new GameBoard();
-
+    GameBoard board ;
+    public static int typeOfBoard = 0;
 
     public static void main(String[] args) {
         AppTicTacTou appTicTacTou = new AppTicTacTou();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome in Game TicTacTou! \nPlease choose size of board 3x3 or 10x10");
         System.out.println("For 3x3 please choose number 3. \nFor 10x10 please choose number 10");
-        int typeOfBoard = 0;
+
         while (true) {
             try {
                 typeOfBoard = Integer.parseInt(scanner.nextLine());
@@ -43,6 +43,8 @@ public class AppTicTacTou {
                 System.out.println("Please try again and choose number of players 1 or 2:");
             }
         }
+
+        appTicTacTou.board =  new GameBoard(typeOfBoard);
         System.out.println("Please write Your Name:");
         String playerName = scanner.next();
         PlayerInterface player1 = new Player(playerName, 'X');
@@ -60,36 +62,39 @@ public class AppTicTacTou {
     private void runGame(PlayerInterface player1, PlayerInterface player2) {
         System.out.println(board.printGameBoard());
         while (true) {
+            //player 1
             playerMoves(board, player1);
             System.out.println(board.printGameBoard());
+            if(checkWinner(board.checkWinner(player1.getSign()), player1)) break;
 
-            if (checkWinner(board, player1)) break;
+            //player2
             playerMoves(board, player2);
-
             System.out.println(board.printGameBoard());
-
-            if (checkWinner(board,  player2)) break;
-
-
+            if(checkWinner(board.checkWinner(player2.getSign()), player2)) break;
         }
     }
 
-
-    private boolean checkWinner(GameBoard board, PlayerInterface player) {
-        String result = winConditions.checkWinner(board, player);
-        if (!result.equals("Game Runs")) {
-            System.out.println(result);
-            return true;
+    private static boolean checkWinner(char result, PlayerInterface player) {
+        if (result == GameBoard.CONTINUE) {
+            return false;
         }
-        return false;
+        if (GameBoard.TIE == result) {
+            System.out.println("It is a TIE");
+        } else {
+            System.out.println(player.getName() + " you WON!!!");
+        }
+        return true;
     }
+
 
     private void playerMoves(GameBoard board, PlayerInterface player) {
         boolean occupied = true;
 
-        int move = 0;
+
+        Move move = null;
         while (occupied) {
-            move = player.move();
+
+            move = player.move(board.getSize());
             occupied = board.isOccupied(move);
         }
         board.fieldPiece(move, player.getSign());
