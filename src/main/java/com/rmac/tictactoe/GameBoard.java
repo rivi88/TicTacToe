@@ -174,9 +174,6 @@ public class GameBoard {
                 board[j + 3] == board[j + 4];
     }
 
-    public static void main(String[] args) {
-
-    }
 
     public char checkWinner(char symbol) {
         if (size == 3) {

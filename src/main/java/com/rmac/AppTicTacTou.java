@@ -7,8 +7,9 @@ import java.util.Scanner;
 
 
 public class AppTicTacTou {
-    GameBoard board ;
-    public static int typeOfBoard = 0;
+    WinnerSaver ws = new WinnerSaver();
+    GameBoard board;
+    private static int typeOfBoard = 0;
 
     public static void main(String[] args) {
         AppTicTacTou appTicTacTou = new AppTicTacTou();
@@ -44,7 +45,7 @@ public class AppTicTacTou {
             }
         }
 
-        appTicTacTou.board =  new GameBoard(typeOfBoard);
+        appTicTacTou.board = new GameBoard(typeOfBoard);
         System.out.println("Please write Your Name:");
         String playerName = scanner.next();
         PlayerInterface player1 = new Player(playerName, 'X');
@@ -65,16 +66,23 @@ public class AppTicTacTou {
             //player 1
             playerMoves(board, player1);
             System.out.println(board.printGameBoard());
-            if(checkWinner(board.checkWinner(player1.getSign()), player1)) break;
+            if (checkGameEnd(board.checkWinner(player1.getSign()), player1)) {
+                ws.savesScore(player1);
+                break;
+            }
+
 
             //player2
             playerMoves(board, player2);
             System.out.println(board.printGameBoard());
-            if(checkWinner(board.checkWinner(player2.getSign()), player2)) break;
+            if (checkGameEnd(board.checkWinner(player2.getSign()), player2)) {
+                ws.savesScore(player2);
+                break;
+            }
         }
     }
 
-    private static boolean checkWinner(char result, PlayerInterface player) {
+    private static boolean checkGameEnd(char result, PlayerInterface player) {
         if (result == GameBoard.CONTINUE) {
             return false;
         }
